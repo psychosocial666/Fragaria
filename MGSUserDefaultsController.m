@@ -83,9 +83,11 @@ static NSMutableDictionary *controllerInstances;
 	NSAssert(![self.groupID isEqualToString:MGSUSERDEFAULTS_GLOBAL_ID],
 			 @"You cannot set managedInstances for the global controller.");
 	
-	[self unregisterBindings:_managedProperties];
+	[[[self class] sharedController] unregisterBindings];
+	[self unregisterBindings];
     _managedInstances = managedInstances;
-	[self registerBindings:_managedProperties];
+	[self registerBindings];
+	[[[self class] sharedController] registerBindings];
 }
 
 - (NSSet *)managedInstances
@@ -115,9 +117,9 @@ static NSMutableDictionary *controllerInstances;
  */
 - (void)setManagedProperties:(NSSet *)managedProperties
 {
-    [self unregisterBindings:_managedProperties];
+    [self unregisterBindings];
     _managedProperties = managedProperties;
-	[self registerBindings:_managedProperties];
+	[self registerBindings];
 }
 
 
@@ -203,10 +205,10 @@ static NSMutableDictionary *controllerInstances;
 /*
  *  -registerBindings
  */
-- (void)registerBindings:(NSSet *)propertySet
+- (void)registerBindings
 {
 	// Bind all relevant properties of each instance to `values` dictionary.
-    for (NSString *key in propertySet)
+    for (NSString *key in self.managedProperties)
     {
         for (MGSFragariaView *fragaria in self.managedInstances)
         {
@@ -219,10 +221,10 @@ static NSMutableDictionary *controllerInstances;
 /*
  *  - unregisterBindings:
  */
-- (void)unregisterBindings:(NSSet *)propertySet
+- (void)unregisterBindings
 {
     // Stop observing properties
-    for (NSString *key in propertySet)
+    for (NSString *key in self.managedProperties)
     {
         for (MGSFragariaView *fragaria in self.managedInstances)
         {
