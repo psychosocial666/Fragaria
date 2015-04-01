@@ -341,6 +341,15 @@ static void *LineHighlightingPrefChanged = &LineHighlightingPrefChanged;
 }
 
 
+/*
+ * - setRichText:
+ */
+- (void)setRichText:(BOOL)richText
+{
+    [super setRichText:NO];
+}
+
+
 #pragma mark - Strings - Properties and Methods
 
 

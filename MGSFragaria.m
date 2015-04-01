@@ -448,10 +448,13 @@ NSString * const MGSFOAutoCompleteDelegate = @"autoCompleteDelegate";
  */
 - (void)replaceTextStorage:(NSTextStorage*)textStorage
 {
+    NSRange wholeRange = NSMakeRange(0, textStorage.length);
+    
     [self.gutterView layoutManagerWillChangeTextStorage];
     [self.syntaxErrorController layoutManagerWillChangeTextStorage];
     [self.textView.syntaxColouring layoutManagerWillChangeTextStorage];
     
+    [textStorage addAttributes:self.textView.typingAttributes range:wholeRange];
     [self.textView.layoutManager replaceTextStorage:textStorage];
     
     [self.gutterView layoutManagerDidChangeTextStorage];

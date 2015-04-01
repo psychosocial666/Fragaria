@@ -123,16 +123,20 @@
 /*
  * - replaceTextStorage:
  */
-- (void)replaceTextStorage:(NSTextStorage *)textStorage{
-	[self.gutterView layoutManagerWillChangeTextStorage];
-	[self.syntaxErrorController layoutManagerWillChangeTextStorage];
-	[self.textView.syntaxColouring layoutManagerWillChangeTextStorage];
-	
-	[self.textView.layoutManager replaceTextStorage:textStorage];
-	
-	[self.gutterView layoutManagerDidChangeTextStorage];
-	[self.syntaxErrorController layoutManagerDidChangeTextStorage];
-	[self.textView.syntaxColouring layoutManagerDidChangeTextStorage];
+- (void)replaceTextStorage:(NSTextStorage *)textStorage
+{
+    NSRange wholeRange = NSMakeRange(0, textStorage.length);
+    
+    [self.gutterView layoutManagerWillChangeTextStorage];
+    [self.syntaxErrorController layoutManagerWillChangeTextStorage];
+    [self.textView.syntaxColouring layoutManagerWillChangeTextStorage];
+    
+    [textStorage addAttributes:self.textView.typingAttributes range:wholeRange];
+    [self.textView.layoutManager replaceTextStorage:textStorage];
+    
+    [self.gutterView layoutManagerDidChangeTextStorage];
+    [self.syntaxErrorController layoutManagerDidChangeTextStorage];
+    [self.textView.syntaxColouring layoutManagerDidChangeTextStorage];
 }
 
 
